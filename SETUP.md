@@ -90,9 +90,3 @@ foundryup
 # Add to PATH (restart terminal after)
 source ~/.bashrc  # or ~/.zshrc
 ```
-
-## What's Next?
-
-Once Step 1 tests pass, you're ready for Step 2: Building the DEX!
-
-See `STEP2.md` for the next phase of development.

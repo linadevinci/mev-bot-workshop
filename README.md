@@ -1,10 +1,8 @@
 # MEV Arbitrage Bot - Complete Workshop 🤖💰
 
-Build a complete MEV arbitrage system from scratch and execute real profitable trades on Sepolia testnet!
+Complete MEV arbitrage system from scratch and execute real profitable trades on Sepolia testnet!
 
-## 🎯 What You'll Build
-
-A production-ready MEV arbitrage bot that:
+MEV arbitrage bot that:
 - Detects price differences between DEX pools
 - Executes atomic arbitrage (buy low, sell high)
 - Makes profit on-chain
@@ -65,12 +63,15 @@ foundryup
 ### Setup
 
 ```bash
-# 1. initialize git
+# 1. Initialize git (required for forge)
 git init
+git add .
+git commit -m "init"
 
-# 2. Install dependencies
+# 3. Install dependencies
+forge install foundry-rs/forge-std
+forge install OpenZeppelin/openzeppelin-contracts@v5.0.1
 
-forge install
 
 # 3. Setup environment
 cp .env.example .env
@@ -86,12 +87,10 @@ forge test
 
 ---
 
-## 🎮 Automated Deployment (Recommended)
-
 ### One-Command Deploy Everything:
 
 ```bash
-./deploy.sh
+bash deploy.sh
 ```
 
 This automatically:
@@ -101,8 +100,7 @@ This automatically:
 4. ✅ Saves addresses to `.env`
 5. ✅ Executes arbitrage
 6. ✅ Shows profit!
-
-**Total time:** ~2 minutes  
+  
 **Expected profit:** ~2 USDC per execution
 
 ---
@@ -196,123 +194,8 @@ Total:             31 tests ✅
 - `ExecuteArbitrage.s.sol` - Run arbitrage
 - `deploy.sh` - Automated full deployment
 
----
 
-## 🎓 Learning Path
 
-### Step 1: ERC20 Tokens
-**Learn:** Token mechanics, decimals, minting, transfers
-
-**Key concepts:**
-- Why 6 decimals for stablecoins?
-- How does `_mint()` work?
-- What is `Ownable`?
-
-**Tests:** 5 passing
-
-### Step 2: AMM DEX
-**Learn:** Constant product formula, liquidity pools, price impact
-
-**Key concepts:**
-```
-Constant Product: x * y = k
-Price = reserve1 / reserve0
-Spread = |price1 - price2| / min(price1, price2)
-```
-
-**Fee vs Slippage:**
-- Fee: Always 0.3% per swap
-- Slippage: Increases with trade size!
-  - 0.1% of pool → ~0.1% slippage
-  - 1% of pool → ~1% slippage
-  - 10% of pool → ~9% slippage
-
-**Tests:** 14 passing
-
-### Step 3: Arbitrage Bot
-**Learn:** MEV strategies, atomic execution, profit calculation
-
-**The Strategy:**
-1. Monitor prices on both pools
-2. If spread > 0.3% (covers fees)
-3. Buy token on cheaper pool
-4. Sell token on expensive pool
-5. Keep the profit!
-
-**The Math:**
-```
-Setup:
-  Pool 1: 1 USDT = 1.00 USDC
-  Pool 2: 1 USDT = 1.05 USDC
-  Spread: 5%
-
-Trade 100 USDC:
-  Naive: 5% = 5 USDC profit
-  
-  Reality:
-  - Fees: 0.6 USDC (0.3% × 2)
-  - Slippage: ~2 USDC
-  - Net: ~2.3 USDC ✅
-  
-  ROI: 2.3%
-```
-
-**Tests:** 12 passing
-
-### Step 4: Deployment
-**Learn:** Foundry scripts, testnet deployment, transaction execution
-
-**Gas costs on Sepolia:**
-- Deploy tokens: ~0.0015 ETH
-- Deploy DEX + Bot: ~0.003 ETH
-- Execute arbitrage: ~0.0002 ETH
-- **Total:** ~0.005 ETH (~$12)
-
----
-
-## 💡 Key Insights
-
-### Why Arbitrage Helps Markets
-
-**Before arbitrage:**
-```
-Pool 1: 1.00 USDC/USDT
-Pool 2: 1.05 USDC/USDT
-Inefficient! Price should be equal ❌
-```
-
-**After arbitrage:**
-```
-Pool 1: 1.02 USDC/USDT
-Pool 2: 1.03 USDC/USDT
-More efficient! Prices converging ✅
-```
-
-**Eventually:**
-```
-Both pools: ~1.025 USDC/USDT
-Perfect equilibrium! 🎯
-```
-
-### Why Small Trades Better?
-
-```
-Trade 10% of pool:
-  Input: 1000 USDC
-  Slippage: ~9%
-  Output after fees: ~906 USDC
-  Loss: 94 USDC ❌
-
-Trade 1% of pool:
-  Input: 100 USDC
-  Slippage: ~1%
-  Output after fees: ~98.3 USDC
-  Profit from 5% spread: ~2.3 USDC ✅
-```
-
-**Lesson:** Many small trades > Few large trades
-
----
 
 ## 🔍 Project Structure
 
@@ -360,127 +243,3 @@ mev-bot-workshop/
 → Make sure lib/ folder exists
 
 ---
-
-## 🎯 Success Criteria
-
-- [x] All 31 tests passing
-- [x] Tokens deployed to Sepolia
-- [x] DEX deployed with 5% spread
-- [x] Bot deployed and funded
-- [x] Arbitrage executed successfully
-- [x] Profit made on-chain! 💰
-
----
-
-## 🚀 Next Steps
-
-### Execute More Trades
-
-```bash
-# Run arbitrage again
-forge script script/ExecuteArbitrage.s.sol:ExecuteArbitrage \
-  --rpc-url sepolia \
-  --broadcast
-
-# Each trade:
-# - Reduces spread further
-# - Makes smaller profit
-# - Eventually unprofitable (equilibrium!)
-```
-
-### Advanced Challenges
-
-1. **Optimize Trade Size**
-   - Find amount that maximizes profit
-   - Balance gas costs vs profit
-
-2. **Flash Loans**
-   - Borrow capital
-   - Execute larger arbitrage
-   - Repay + keep profit
-
-3. **Multi-DEX Arbitrage**
-   - Monitor Uniswap, Sushiswap, etc.
-   - Cross-DEX opportunities
-   - Gas optimization crucial
-
-4. **Mainnet Fork Testing**
-   - Test against real Uniswap pools
-   - No risk, real data
-   - `--fork-url` flag
-
-5. **MEV Protection**
-   - Study Flashbots
-   - Private mempools
-   - MEV-Boost integration
-
----
-
-## 📖 Additional Resources
-
-**MEV Concepts:**
-- [Flashbots Docs](https://docs.flashbots.net/)
-- [MEV Wiki](https://github.com/flashbots/mev-research)
-- [Uniswap V2 Whitepaper](https://uniswap.org/whitepaper.pdf)
-
-**Foundry:**
-- [Foundry Book](https://book.getfoundry.sh/)
-- [Foundry Cheatsheet](https://github.com/dabit3/foundry-cheatsheet)
-
-**Solidity:**
-- [Solidity Docs](https://docs.soliditylang.org/)
-- [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
-
----
-
-## ⚠️ Disclaimer
-
-**FOR EDUCATIONAL PURPOSES ONLY**
-
-This is a learning project. Before using on mainnet:
-- Get professional security audit
-- Understand MEV competition
-- Calculate real gas costs
-- Consider MEV protection
-- Know the risks
-
-DO NOT:
-- Deploy to mainnet without audit
-- Use with real funds without testing
-- Share private keys
-- Commit `.env` to git
-
----
-
-## 🎉 Congratulations!
-
-You've built a complete MEV arbitrage system from scratch!
-
-**You now understand:**
-- ✅ Smart contract development
-- ✅ AMM mathematics (x*y=k)
-- ✅ MEV strategies
-- ✅ Foundry testing & deployment
-- ✅ Real profit extraction
-
-**You're now an MEV Developer!** 🚀
-
----
-
-## 📞 Support
-
-**Questions? Issues?**
-- Check the inline code comments (heavily documented)
-- Run tests with `-vvvv` for detailed traces
-- Review transaction on Etherscan
-
-**Share Your Success:**
-- Deployed bot address: _______________
-- Total profit made: _______________
-- Lessons learned: _______________
-
----
-
-**Built with:** Foundry • Solidity 0.8.20 • OpenZeppelin
-
-**License:** MIT
