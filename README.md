@@ -1,6 +1,6 @@
 # MEV Arbitrage Bot - Complete Workshop 🤖💰
 
-Complete MEV arbitrage system from scratch and execute real profitable trades on Sepolia testnet!
+Complete MEV arbitrage system from scratch and execute real profitable trades on Sepolia testnet
 
 MEV arbitrage bot that:
 - Detects price differences between DEX pools
